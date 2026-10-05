@@ -26,7 +26,9 @@
 export function readForm() {
   // TODO: read .value off each input. Trim the name, and convert the price
   // with Number().
-  throw new Error("readForm is not written yet");
+    const name = document.getElementById("name").value.trim();
+  const price = Number(document.getElementById("price").value);
+  return { name, price };
 }
 
 /**
@@ -36,7 +38,8 @@ export function readForm() {
  */
 export function clearForm() {
   // TODO: set each input's .value to an empty string.
-  throw new Error("clearForm is not written yet");
+    document.getElementById("name").value = "";
+  document.getElementById("price").value = "";
 }
 
 /**
@@ -54,7 +57,25 @@ export function clearForm() {
 export function renderList(items) {
   // TODO: empty #list first, then build one card per item — the same card
   // shape as module 12.
-  throw new Error("renderList is not written yet");
+    const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  items.forEach((item) => {
+    const card = document.createElement("li");
+    card.classList.add("card");
+
+    const heading = document.createElement("h3");
+    heading.textContent = item.name;
+
+    const price_p = document.createElement("p");
+    price_p.classList.add("price");
+    price_p.textContent = `${item.price} EGP`;
+
+    card.appendChild(heading);
+    card.appendChild(price_p);
+
+    list.appendChild(card);
+  });
 }
 
 /**
@@ -87,3 +108,27 @@ export function renderList(items) {
  */
 
 // TODO: write wireForm here.
+export function wireForm() {
+  const items = [];
+
+  document.getElementById("product-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const { name, price } = readForm();
+
+    if (name === "") {
+      document.getElementById("error").textContent = "Give the product a name.";
+      return;
+    }
+
+    if (!(price > 0)) {
+      document.getElementById("error").textContent = "Give the product a price.";
+      return;
+    }
+
+    document.getElementById("error").textContent = "";
+    items.push({ name, price });
+    renderList(items);
+    clearForm();
+  });
+}
